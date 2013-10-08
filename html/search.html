@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel='stylesheet' type='text/css' media='screen' href='../bootstrap/css/bootstrap.min.css'>
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link rel='stylesheet' type='text/css' media='screen' href='../css/styles.css'>
+</head>
+<body>
+<div class="main container">
+<form class="form-horizontal" id="searchForm">
+	<h2>Search</h2>
+
+	<div class="control-group">
+		<label class="control-label" for="item_name">Item</label>
+		<div class="controls">
+			<input type="text" id="item_name" name="item_name" class="input-xxlarge">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="item_name">Allergen</label>
+		<div class="controls">
+			<input type="text" id="allergen" name="allergen" class="input-xxlarge">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="item_name">Diets</label>
+		<div class="controls">
+			<label class="checkbox">
+		  	<input type="checkbox" value="">
+			  Help me bulk up!
+			</label>
+			<label class="checkbox">
+			  <input type="checkbox" value="">
+			  Help me lose weight!
+			</label>
+			<label class="checkbox">
+			  <input type="checkbox" value="">
+			  Help me gain weight!
+			</label>
+		</div>
+	</div>
+	<button type="submit" class="btn btn-primary btn-lg pull-right" id="submitForm">Submit</button><br>
+	<hr/>
+	<a name="resultArea"></a>
+	<h2>Result</h2>
+	<a name="resultArea2"></a>
+	<div id="result" class="span12">
+	</div>
+
+</form>
+</div>
+
+<script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../js/json.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#searchForm').submit(function(){
+		$('#result').html('<i class="icon-spinner icon-spin icon-large"></i> <span class="lead">Processing your request...</span>');
+		$('html,body').animate({scrollTop: $("a[name='resultArea']").offset().top}, 'fast');
+		$.post('process-search.php', {'param' : $('#searchForm').serialize()}, function(searchResult){
+				$('#result').html(searchResult);
+			$('html,body').animate({scrollTop: $("a[name='resultArea2']").offset().top}, 'fast');
+		});
+		return false;
+	});
+});
+</script>
+</body>
+</html>
