@@ -147,3 +147,9 @@ body{
 	-o-user-select: none;
 	user-select: none;
 }
+
+.grade{
+	text-align: center;
+	font-size: 130px;
+	font-weight: 100;
+}

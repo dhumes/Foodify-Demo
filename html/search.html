@@ -26,15 +26,19 @@
 		<label class="control-label" for="item_name">Diets</label>
 		<div class="controls">
 			<label class="checkbox">
-		  	<input type="checkbox" value="">
+		  	<input type="checkbox" value="vegetarian" name="vegetarian">
+			  Vegetarian
+			</label>
+			<label class="checkbox">
+		  	<input type="checkbox" value="build-muscle" name="build-muscle">
 			  Help me bulk up!
 			</label>
 			<label class="checkbox">
-			  <input type="checkbox" value="">
+			  <input type="checkbox" value="" disabled>
 			  Help me lose weight!
 			</label>
 			<label class="checkbox">
-			  <input type="checkbox" value="">
+			  <input type="checkbox" value="" disabled>
 			  Help me gain weight!
 			</label>
 		</div>
@@ -60,7 +64,7 @@ $(document).ready(function(){
 		$('html,body').animate({scrollTop: $("a[name='resultArea']").offset().top}, 'fast');
 		$.post('process-search.php', {'param' : $('#searchForm').serialize()}, function(searchResult){
 				$('#result').html(searchResult);
-			$('html,body').animate({scrollTop: $("a[name='resultArea2']").offset().top}, 'fast');
+			// $('html,body').animate({scrollTop: $("a[name='resultArea2']").offset().top}, 'fast');
 		});
 		return false;
 	});

@@ -21,6 +21,7 @@ if ( (bool)$newData['return_result_as_json'] ){
 }else
 	$json = (json_encode( (array)$data));
 	$json = json_decode($json, true);
+
 	echo '
 	<div class="span5">
 		<p class="lead">'.$json['hits'][0]['_source']['item_name'].'</p>
@@ -104,12 +105,173 @@ if ( (bool)$newData['return_result_as_json'] ){
 				</table>
 			</div>';
 
-			// echo gettype($json['hits'][0]['_source']['nf_ingredient_statement']);
 
+			$meats = array('abalone', 
+							'alligator',
+							'bacon',
+							'badger',
+							'bass',
+							'balut',
+							'beef',
+							'bison',
+							'buffalo',
+							'capon',
+							'cat',
+							'chicken',
+							'chucker',
+							'clams',
+							'cod',
+							'conch',
+							'corned beef',
+							'Cornish hen',
+							'crab',
+							'crawfish',
+							'cuttlefish',
+							'deviled meats',
+							'dog',
+							'dove',
+							'dried beef',
+							'duck',
+							'duckling',
+							'eels',
+							'elk',
+							'fish',
+							'foie gras',
+							'frankfurters',
+							'frog legs',
+							'gerbil',
+							'goat',
+							'goose',
+							'grouse',
+							'guinea fowl',
+							'guinea pig',
+							'gulls',
+							'ham',
+							'hamburger',
+							'hamster',
+							'hare',
+							'herring',
+							'horsemeat',
+							'jerky',
+							'kangaroo',
+							'kidney',
+							'kippers',
+							'lamb',
+							'liver',
+							'lobster',
+							'monkey',
+							'moose',
+							'mussels',
+							'mutton',
+							'octopus',
+							'blankmuse',
+							'opossum',
+							'oysters',
+							'partridge',
+							'pea fowl',
+							'pemmican',
+							'periwinkle',
+							'pheasant',
+							'pigeon',
+							'pork',
+							'pork roll',
+							'prairie chicken',
+							'prawns',
+							'ptarmigan',
+							'puffin',
+							'quail',
+							'rabbit',
+							'raccoon ',
+							'rattlesnake meat',
+							'reindeer',
+							'rook',
+							'salmon',
+							'salted meats',
+							'sardines',
+							'sashimi',
+							'sausage',
+							'scallops',
+							'scrapple',
+							'seal',
+							'sharkmeat',
+							'shrimp',
+							'smoked meats',
+							'snails',
+							'snake',
+							'Spam',
+							'sparrow',
+							'squab',
+							'squid',
+							'squirrel',
+							'swan',
+							'sweetbreads',
+							'terrapin',
+							'tilapia',
+							'tendon',
+							'tongue',
+							'tripe',
+							'trout',
+							'tuna',
+							'turkey',
+							'turtle',
+							'uni',
+							'veal',
+							'venison',
+							'whelk',
+							'wild boar',
+							'wild duck',
+							'wild goose');
+
+			// echo gettype($json['hits'][0]['_source']['nf_ingredient_statement']);
+	
+			$warning = false;
 			$ingredients = $json['hits'][0]['_source']['nf_ingredient_statement'];
+			$item_name = $json['hits'][0]['_source']['item_name'];
 			if($newData['allergen']){
 				if ((strpos($ingredients, $newData['allergen']) !== false) || (strpos($ingredients, ucfirst($newData['allergen']))) || (strpos($ingredients, strtolower($newData['allergen'])))) {
-				    echo '<div class="span6"><div class="alert"><strong>Warning!</strong> Contains '. $newData['allergen'] .'.</div><div class="warning"><i class="icon-warning-sign icon-5"></i></div></div>';
+				    echo '<div class="span6"><div class="alert"><strong>Warning! </strong> Contains '. $newData['allergen'] .'.</div><div class="warning"><i class="icon-warning-sign icon-5"></i></div></div>';
+				    $warning = true;
+				}
+			}
+
+			if($newData['vegetarian'] == 'vegetarian'){
+				$hasMeat = false;
+				foreach ($meats as $meat){
+					// if ((strpos($ingredients, $meat) !==false) || (strpos($ingredients, ucfirst($meat)) !==false) || (strpos($ingredients, strtolower($meat)) !==false) || (strpos($ingredients, strtolower($item_name)) !==false) || (strpos($ingredients, ucfirst($item_name)) !==false)){
+					// 	echo '<div class="span6"><div class="alert"><strong>Warning!</strong>Contains meat product.</div><div class="warning"><i class="icon-warning-sign icon-5"></i></div></div>';
+					// }
+					if ((strpos($item_name, strtolower($meat)) !==false) || (strpos($item_name, ucfirst($meat)) !==false)
+						||
+						(strpos($ingredients, strtolower($meat)) !==false) || (strpos($ingredients, ucfirst($meat)) !==false)){
+						$hasMeat = true;
+						$warning = true;
+					}
+				}
+				if ($hasMeat == true){
+					echo '<div class="span6"><div class="alert"><strong>Warning! </strong>Contains meat product.</div><div class="warning"><i class="icon-warning-sign icon-5"></i></div></div>';
+				}
+			};
+
+
+			if($newData['build-muscle'] == 'build-muscle' and $warning==false and ($json['hits'][0]['_source']['nf_calories']>0)){
+				$protein_density= ($json['hits'][0]['_source']['nf_protein']/50*100)/($json['hits'][0]['_source']['nf_calories']/2000*100);
+				if($protein_density>=7.6){
+					echo '<div class="span6 grade">A+</div>';
+				}
+				elseif ($protein_density<7.6 and $protein_density>=3.4) {
+					echo '<div class="span6 grade">A-</div>';
+				}
+				elseif ($protein_density<3.4 and $protein_density>=1.5) {
+					echo '<div class="span6 grade">B</div>';
+				}
+				elseif ($protein_density<1.5 and $protein_density>=1.0) {
+					echo '<div class="span6 grade">C</div>';
+				}
+				elseif ($protein_density<1.0 and $protein_density>=0.5) {
+					echo '<div class="span6 grade">D</div>';
+				}
+				else{
+					echo '<div class="span6 grade">F</div>';
 				}
 			}
 
